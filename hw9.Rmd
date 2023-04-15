@@ -1,0 +1,38 @@
+---
+title: "Avengers"
+author: "Ben Lehmnn"
+date: "2023-04-06"
+output: html_document
+---
+Github:https://github.com/BenLehmann12/Avengers
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+library(tidyr)
+library(dplyr)
+library(tidyverse)
+av <- read.csv("~/DS202RWork/avengers.csv", stringsAsFactors = FALSE)
+
+av1 = av %>% filter(Name.Alias !="")  #Get out Empty
+
+av2 = av1 %>% gather(key=time, value=death, c(11,13,15,17,19)) %>% select(Name.Alias, time, death) %>% mutate(time = parse_number(time))
+
+av3 = av1 %>% gather(key=time, value=return, c(12,14,16,18,20)) %>% select(Name.Alias, time, return) %>% mutate(time = parse_number(time))
+
+
+av.comb = left_join(av2,av3, by=c("Name.Alias","time"))  #Henry Jonathan "Hank" Pym: 5 time
+```
+```{r}
+av_once = av.comb %>% filter(death=="YES", time==1)  #Not 69, 63 died once (36%)
+
+mv = av.comb %>% filter(Name.Alias %in% c('Anthony Edward "Tony" Stark','Robert Bruce Banner','	
+Thor Odinson','Natalia Alianovna Romanova','Wanda Maximoff','Clinton Francis Barton'), death=="YES")  #Hawkeye dies 3 times
+
+av_ret = av.comb %>% filter(death=="YES", return=="YES")  #55 Return after they have died
+
+```
+
+
